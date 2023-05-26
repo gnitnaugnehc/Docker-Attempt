@@ -19,7 +19,10 @@ export class ProductService {
               name
               description
               price
-              tags
+              tags {
+                id
+                name
+              }
             }
           }
         `
@@ -33,13 +36,16 @@ export class ProductService {
     return this.apollo
       .watchQuery<any>({
         query: gql`
-          query($id: Long!) {
+          query($id: ID!) {
             getProduct(id: $id) {
               id
               name
               description
               price
-              tags
+              tags {
+                id
+                name
+              }
             }
           }
         `,
@@ -56,13 +62,16 @@ export class ProductService {
     return this.apollo
       .watchQuery<any>({
         query: gql`
-          query($tags: [String]!) {
+          query($tags: [String!]!) {
             searchProductsByTagNames(tags: $tags) {
               id
               name
               description
               price
-              tags
+              tags {
+                id
+                name
+              }
             }
           }
         `,
@@ -79,13 +88,16 @@ export class ProductService {
     return this.apollo
       .mutate<any>({
         mutation: gql`
-          mutation($name: String!, $description: String!, $price: Float!, $tags: [String]!) {
+          mutation($name: String!, $description: String!, $price: Float!, $tags: [String!]!) {
             createProduct(name: $name, description: $description, price: $price, tags: $tags) {
               id
               name
               description
               price
-              tags
+              tags {
+                id
+                name
+              }
             }
           }
         `,
@@ -105,13 +117,16 @@ export class ProductService {
     return this.apollo
       .mutate<any>({
         mutation: gql`
-          mutation($id: Long!, $name: String!, $description: String!, $price: Float!, $tags: [String]!) {
+          mutation($id: ID!, $name: String!, $description: String!, $price: Float!, $tags: [String!]!) {
             updateProduct(id: $id, name: $name, description: $description, price: $price, tags: $tags) {
               id
               name
               description
               price
-              tags
+              tags {
+                id
+                name
+              }
             }
           }
         `,
@@ -132,7 +147,7 @@ export class ProductService {
     return this.apollo
       .mutate<any>({
         mutation: gql`
-          mutation($id: Long!) {
+          mutation($id: ID!) {
             deleteProduct(id: $id)
           }
         `,

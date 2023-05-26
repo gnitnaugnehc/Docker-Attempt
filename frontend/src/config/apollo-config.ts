@@ -1,13 +1,14 @@
 import { ApolloLink } from '@apollo/client/core';
 import { HttpLink } from 'apollo-angular/http';
-import { InMemoryCache } from 'apollo-cache-inmemory';
+import { InMemoryCache } from '@apollo/client/core';
 
-export function createApolloOptions(httpLink: HttpLink) {
-  const http = httpLink.create({ uri: 'http://localhost:8080/graphql' });
-  const link = ApolloLink.from([http]);
-
+export function createApolloOptions(httpLink: HttpLink): any {
   return {
-    link,
+    link: ApolloLink.from([
+      httpLink.create({
+        uri: 'http://localhost:8080/graphql',
+      }),
+    ]),
     cache: new InMemoryCache(),
   };
 }

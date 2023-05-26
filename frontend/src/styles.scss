@@ -1,1 +1,15 @@
-/* You can add global styles to this file, and also import other style files */
+/* Add this CSS in your component's CSS file or in a separate CSS file */
+a {
+    text-decoration: none;
+    color: blue;
+    padding: 5px;
+  }
+  
+  a:hover {
+    text-decoration: underline;
+  }
+  
+  .router-link-active {
+    font-weight: bold;
+  }
+  

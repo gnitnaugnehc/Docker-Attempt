@@ -8,6 +8,16 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-  <app-root></app-root>
+  <app-root>
+    <h1>My Angular App</h1>
+    <nav>
+      <a routerLink="/products">Products</a>
+      <a routerLink="/products/new">Add Product</a>
+    </nav>
+    <router-outlet></router-outlet>
+  </app-root>
+
+  <!-- Include any additional scripts or stylesheets here -->
+
 </body>
 </html>
