@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 
@@ -8,33 +8,57 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./product-form.component.scss'],
 })
 export class ProductFormComponent implements OnInit {
-  product: Product = new Product();
+  @Input() product: Product = new Product();
 
   tagsString = '';
 
   constructor(private productService: ProductService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.product) {
+      this.tagsString = this.product.tags.join(',');
+    }
+  }
 
   submitForm() {
     const tags = this.tagsString.split(',');
 
-    this.productService
-      .createProduct(
-        this.product.name,
-        this.product.description,
-        this.product.price,
-        tags
-      )
-      .subscribe({
-        next: (response) => {
-          console.log('Product created:', response);
-          this.resetForm();
-        },
-        error: (error) => {
-          console.error('Error creating product:', error);
-        },
-      });
+    if (this.product.id) {
+      this.productService
+        .updateProduct(
+          this.product.id,
+          this.product.name,
+          this.product.description,
+          this.product.price,
+          tags
+        )
+        .subscribe({
+          next: (response) => {
+            console.log('Product updated:', response);
+            this.resetForm();
+          },
+          error: (error) => {
+            console.error('Error updating product:', error);
+          },
+        });
+    } else {
+      this.productService
+        .createProduct(
+          this.product.name,
+          this.product.description,
+          this.product.price,
+          tags
+        )
+        .subscribe({
+          next: (response) => {
+            console.log('Product created:', response);
+            this.resetForm();
+          },
+          error: (error) => {
+            console.error('Error creating product:', error);
+          },
+        });
+    }
   }
 
   private resetForm() {

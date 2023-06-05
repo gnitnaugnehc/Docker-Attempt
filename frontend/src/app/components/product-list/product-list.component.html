@@ -1,24 +1,27 @@
 <div *ngIf="products$ | async as products">
-    <h1>Product List</h1>
-    <table>
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>CreatedAt</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let product of products">
-          <td>{{ product.id }}</td>
-          <td>{{ product.name }}</td>
-          <td>{{ product.description }}</td>
-          <td>{{ product.price }}</td>
-          <td>{{ product.createdAt }}</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  
+  <h1>Product List</h1>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Price</th>
+        <th>CreatedAt</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let product of products">
+        <td>{{ product.id }}</td>
+        <td>{{ product.name }}</td>
+        <td>{{ product.description }}</td>
+        <td>{{ product.price }}</td>
+        <td>{{ product.createdAt }}</td>
+        <td>
+          Tags:
+          <span *ngFor="let tag of product.tags">{{ tag.name }}</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
