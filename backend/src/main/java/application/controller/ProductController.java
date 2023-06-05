@@ -29,13 +29,13 @@ public class ProductController {
     }
 
     @QueryMapping
-    Product getProduct(@Argument Long id) {
-        return productRepository.findById(id).orElse(null);
+    Product getProduct(@Argument String uuid) {
+        return productRepository.findByUuid(uuid);
     }
 
     @QueryMapping
-    Iterable<Product> searchProductsByTagNames(@Argument List<String> tags) {
-        return productRepository.findByTagNames(tags);
+    List<String> searchProductsByTagNames(@Argument List<String> tags) {
+        return productRepository.findUuidsByTagNames(tags);
     }
 
     @MutationMapping
@@ -53,9 +53,9 @@ public class ProductController {
     }
 
     @MutationMapping
-    Product updateProduct(@Argument Long id, @Argument String name, @Argument String description,
+    Product updateProduct(@Argument String uuid, @Argument String name, @Argument String description,
             @Argument Double price, @Argument List<String> tags) {
-        Product product = productRepository.findById(id).orElse(null);
+        Product product = productRepository.findByUuid(uuid);
 
         if (product != null) {
             if (name != null) {
@@ -79,9 +79,9 @@ public class ProductController {
     }
 
     @MutationMapping
-    Boolean deleteProduct(@Argument Long id) {
-        if (productRepository.existsById(id)) {
-            productRepository.deleteById(id);
+    Boolean deleteProduct(@Argument String uuid) {
+        if (productRepository.existsByUuid(uuid)) {
+            productRepository.deleteByUuid(uuid);
             return true;
         }
 

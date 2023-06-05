@@ -32,7 +32,7 @@ export class ProductService {
       );
   }
 
-  getProduct(id: number): Observable<any> {
+  getProduct(id: string): Observable<any> {
     return this.apollo
       .watchQuery<any>({
         query: gql`
@@ -113,7 +113,7 @@ export class ProductService {
       );
   }
 
-  updateProduct(id: number, name: string, description: string, price: number, tags: string[]): Observable<any> {
+  updateProduct(id: string, name: string, description: string, price: number, tags: string[]): Observable<any> {
     return this.apollo
       .mutate<any>({
         mutation: gql`
@@ -143,7 +143,7 @@ export class ProductService {
       );
   }
 
-  deleteProduct(id: number): Observable<boolean> {
+  deleteProduct(id: string): Observable<boolean> {
     return this.apollo
       .mutate<any>({
         mutation: gql`
