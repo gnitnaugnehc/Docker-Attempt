@@ -19,6 +19,7 @@ export class ProductService {
               name
               description
               price
+              createdAt
               tags {
                 id
                 name
@@ -42,6 +43,7 @@ export class ProductService {
               name
               description
               price
+              createdAt
               tags {
                 id
                 name
@@ -68,6 +70,7 @@ export class ProductService {
               name
               description
               price
+              createdAt
               tags {
                 id
                 name
@@ -94,6 +97,7 @@ export class ProductService {
               name
               description
               price
+              createdAt
               tags {
                 id
                 name
@@ -123,6 +127,7 @@ export class ProductService {
               name
               description
               price
+              createdAt
               tags {
                 id
                 name
