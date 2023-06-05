@@ -1,25 +1,33 @@
 package application.model;
 
 import java.util.List;
+import java.util.UUID;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.PrePersist;
 
 @Entity
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(columnDefinition = "uuid", unique = true, nullable = false)
+    private String id;
 
     private String name;
 
-    @ManyToMany
+    @PrePersist
+    private void generateUuid() {
+        if (id == null || id.isEmpty()) {
+            id = UUID.randomUUID().toString();
+        }
+    }
+
+    @ManyToMany(mappedBy = "tags")
     private List<Product> products;
 
-    public Tag(Long id, String name, List<Product> products) {
+    public Tag(String id, String name, List<Product> products) {
         this.id = id;
         this.name = name;
         this.products = products;
@@ -28,11 +36,11 @@ public class Tag {
     public Tag() {
     }
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 

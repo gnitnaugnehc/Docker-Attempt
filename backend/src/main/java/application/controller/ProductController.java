@@ -1,6 +1,8 @@
 package application.controller;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -29,13 +31,13 @@ public class ProductController {
     }
 
     @QueryMapping
-    Product getProduct(@Argument String uuid) {
-        return productRepository.findByUuid(uuid);
+    Optional<Product> getProduct(@Argument String id) {
+        return productRepository.findById(id);
     }
 
     @QueryMapping
-    List<String> searchProductsByTagNames(@Argument List<String> tags) {
-        return productRepository.findUuidsByTagNames(tags);
+    List<Product> searchProductsByTagNames(@Argument List<String> tags) {
+        return productRepository.findByTagNames(tags);
     }
 
     @MutationMapping
@@ -45,6 +47,7 @@ public class ProductController {
         product.setName(name);
         product.setDescription(description);
         product.setPrice(price);
+        product.setCreatedAt(LocalDateTime.now());
 
         List<Tag> tagList = tagRepository.findByNameIn(tags);
         product.setTags(tagList);
@@ -53,11 +56,13 @@ public class ProductController {
     }
 
     @MutationMapping
-    Product updateProduct(@Argument String uuid, @Argument String name, @Argument String description,
+    Product updateProduct(@Argument String id, @Argument String name, @Argument String description,
             @Argument Double price, @Argument List<String> tags) {
-        Product product = productRepository.findByUuid(uuid);
+        Optional<Product> optionalProduct = productRepository.findById(id);
 
-        if (product != null) {
+        if (optionalProduct.isPresent()) {
+            Product product = optionalProduct.get();
+
             if (name != null) {
                 product.setName(name);
             }
@@ -79,9 +84,9 @@ public class ProductController {
     }
 
     @MutationMapping
-    Boolean deleteProduct(@Argument String uuid) {
-        if (productRepository.existsByUuid(uuid)) {
-            productRepository.deleteByUuid(uuid);
+    Boolean deleteProduct(@Argument String id) {
+        if (productRepository.existsById(id)) {
+            productRepository.deleteById(id);
             return true;
         }
 

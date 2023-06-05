@@ -1,4 +1,5 @@
 package application;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.boot.CommandLineRunner;
@@ -34,18 +35,21 @@ public class Application {
             product1.setName("Laptop");
             product1.setDescription("High-performance laptop");
             product1.setPrice(1000.0);
+            product1.setCreatedAt(LocalDateTime.now());
             product1.setTags(List.of(tag1, tag3));
 
             Product product2 = new Product();
             product2.setName("T-Shirt");
             product2.setDescription("Casual t-shirt");
             product2.setPrice(20.0);
+            product2.setCreatedAt(LocalDateTime.now());
             product2.setTags(List.of(tag2));
 
             Product product3 = new Product();
             product3.setName("Headphones");
             product3.setDescription("Wireless headphones");
             product3.setPrice(150.0);
+            product3.setCreatedAt(LocalDateTime.now());
             product3.setTags(List.of(tag1, tag3));
 
             productRepository.saveAll(List.of(product1, product2, product3));

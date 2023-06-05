@@ -22,7 +22,7 @@ public class TagController {
     }
 
     @QueryMapping
-    Tag getTag(@Argument Long id) {
+    Tag getTag(@Argument String id) {
         return tagRepository.findById(id).orElse(null);
     }
 }

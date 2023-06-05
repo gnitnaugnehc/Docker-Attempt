@@ -8,15 +8,9 @@ import org.springframework.data.repository.query.Param;
 
 import application.model.Product;
 
-public interface ProductRepository extends JpaRepository<Product, Long> {
+public interface ProductRepository extends JpaRepository<Product, String> {
 
-    @Query("SELECT DISTINCT p.uuid FROM Product p JOIN p.tags t WHERE t.name IN (:tagNames)")
-    List<String> findUuidsByTagNames(@Param("tagNames") List<String> tags);    
-
-    Product findByUuid(String uuid);
-
-    boolean existsByUuid(String uuid);
-
-    void deleteByUuid(String uuid);
+    @Query("SELECT DISTINCT p FROM Product p JOIN p.tags t WHERE t.name IN :tagNames")
+    List<Product> findByTagNames(@Param("tagNames") List<String> tagNames);
 
 }
