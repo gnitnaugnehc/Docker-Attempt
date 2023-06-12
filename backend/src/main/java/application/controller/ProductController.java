@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
@@ -13,35 +14,34 @@ import application.model.Product;
 import application.model.Tag;
 import application.repository.ProductRepository;
 import application.repository.TagRepository;
+import reactor.core.publisher.Mono;
 
 @Controller
 public class ProductController {
 
-    private final ProductRepository productRepository;
-    private final TagRepository tagRepository;
+    @Autowired
+    private ProductRepository productRepository;
 
-    public ProductController(ProductRepository productRepository, TagRepository tagRepository) {
-        this.productRepository = productRepository;
-        this.tagRepository = tagRepository;
+    @Autowired
+    private TagRepository tagRepository;
+
+    @QueryMapping
+    Mono<List<Product>> getAllProducts() {
+        return Mono.just(productRepository.findAll());
     }
 
     @QueryMapping
-    Iterable<Product> getAllProducts() {
-        return productRepository.findAll();
+    Mono<Optional<Product>> getProduct(@Argument String id) {
+        return Mono.just(productRepository.findById(id));
     }
 
     @QueryMapping
-    Optional<Product> getProduct(@Argument String id) {
-        return productRepository.findById(id);
-    }
-
-    @QueryMapping
-    List<Product> searchProductsByTagNames(@Argument List<String> tags) {
-        return productRepository.findByTagNames(tags);
+    Mono<List<Product>> searchProductsByTagNames(@Argument List<String> tags) {
+        return Mono.just(productRepository.findByTagNames(tags));
     }
 
     @MutationMapping
-    Product createProduct(@Argument String name, @Argument String description, @Argument Double price,
+    Mono<Product> createProduct(@Argument String name, @Argument String description, @Argument Double price,
             @Argument List<String> tags) {
         Product product = new Product();
         product.setName(name);
@@ -52,11 +52,11 @@ public class ProductController {
         List<Tag> tagList = tagRepository.findByNameIn(tags);
         product.setTags(tagList);
 
-        return productRepository.save(product);
+        return Mono.just(productRepository.save(product));
     }
 
     @MutationMapping
-    Product updateProduct(@Argument String id, @Argument String name, @Argument String description,
+    Mono<Product> updateProduct(@Argument String id, @Argument String name, @Argument String description,
             @Argument Double price, @Argument List<String> tags) {
         Optional<Product> optionalProduct = productRepository.findById(id);
 
@@ -77,19 +77,19 @@ public class ProductController {
                 product.setTags(tagList);
             }
 
-            return productRepository.save(product);
+            return Mono.just(productRepository.save(product));
         }
 
-        return null;
+        return Mono.empty();
     }
 
     @MutationMapping
-    Boolean deleteProduct(@Argument String id) {
+    Mono<Boolean> deleteProduct(@Argument String id) {
         if (productRepository.existsById(id)) {
             productRepository.deleteById(id);
-            return true;
+            return Mono.just(true);
         }
 
-        return false;
+        return Mono.just(false);
     }
 }
